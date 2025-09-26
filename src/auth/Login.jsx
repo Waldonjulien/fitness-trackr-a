@@ -9,11 +9,14 @@ export default function Login() {
 
   const [error, setError] = useState(null);
 
-  const tryLogin = async (formData) => {
+  const tryLogin = async (e) => {
+    e.preventDefault();
     setError(null);
 
+    const formData = new FormData(e.target);
     const username = formData.get("username");
     const password = formData.get("password");
+
     try {
       await login({ username, password });
       setPage("activities");
@@ -25,7 +28,7 @@ export default function Login() {
   return (
     <>
       <h1>Log in to your account</h1>
-      <form action={tryLogin}>
+      <form onSubmit={tryLogin}>
         <label>
           Username
           <input type="text" name="username" required />

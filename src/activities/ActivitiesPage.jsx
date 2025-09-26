@@ -6,10 +6,12 @@ import ActivityForm from "./ActivityForm";
 
 export default function ActivitiesPage() {
   const [activities, setActivities] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
 
   const syncActivities = async () => {
     const data = await getActivities();
     setActivities(data);
+    setIsLoading(false);
   };
 
   useEffect(() => {
@@ -19,7 +21,11 @@ export default function ActivitiesPage() {
   return (
     <>
       <h1>Activities</h1>
-      <ActivityList activities={activities} />
+      {isLoading && <p>Loading activities...</p>}
+      {!isLoading && activities.length === 0 && <p>No activities found.</p>}
+      {!isLoading && activities.length > 0 && (
+        <ActivityList activities={activities} syncActivities={syncActivities} />
+      )}
       <ActivityForm syncActivities={syncActivities} />
     </>
   );
